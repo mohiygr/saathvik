@@ -1,7 +1,7 @@
 {
   "name": "saathvik",
   "version": "1.0.0",
-  "description": "Saathvik Food Website",
+  "description": "SathvikFood website and app",
   "author": "Suraj Kumar <suraj@sunson.in>",
   "private": true,
   "scripts": {
@@ -15,10 +15,11 @@
   },
   "dependencies": {
     "buefy": "^0.6.3",
-    "bulma": "^0.6.2",
+    "firebase": "^4.11.0",
+    "firebaseui": "^2.6.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vue-notification": "^1.3.7",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

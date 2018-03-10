@@ -1,17 +1,33 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import { store } from './store'
-import App from './App'
+import App from './App.vue'
+import VueRouter from 'vue-router'
+import Notifications from 'vue-notification'
+import Buefy from 'buefy'
+import firebase from 'firebase'
 import router from './router'
+import {config} from './helpers/firebaseConfig'
+import 'buefy/lib/buefy.css'
+import 'bulma/css/bulma.css'
 
-Vue.config.productionTip = false
+Vue.use(VueRouter)
+Vue.use(Buefy)
+Vue.use(Notifications)
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+let app
+
+firebase.initializeApp(config)
+
+firebase.auth().onAuthStateChanged(
+  function (user) {
+    if (!app) {
+      app = new Vue({
+        el: '#app',
+        components: { App },
+        template: '<App/>',
+        router
+      })
+    }
+  }
+)
+
+export default app

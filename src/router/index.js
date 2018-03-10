@@ -1,15 +1,52 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import VueRouter from 'vue-router'
 
-Vue.use(Router)
+import Home from '../components/Home'
+import About from '../components/About'
+import Order from '../components/Order'
+import Contact from '../components/Contact'
+import Menu from '../components/Menu'
+import Auth from '../components/Auth'
+import Profile from '../components/Profile'
+import Admin from '../components/Admin'
+import NotFound from '../components/NotFound'
+import Logout from '../components/Logout'
+import AuthSuccess from '../components/AuthSuccess'
+import firebase from 'firebase'
 
-export default new Router({
+Vue.use(VueRouter)
+
+const router = new VueRouter({
+  mode: 'history',
   routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    }
+    { path: '/', exact: true, component: Home },
+    { path: '/about', component: About },
+    { path: '/menu', component: Menu },
+    { path: '/contact', component: Contact },
+    { path: '/admin', component: Admin, meta: { requiresAuth: true } },
+    { path: '/order', component: Order, meta: { requiresAuth: true } },
+    { path: '/success', component: AuthSuccess, meta: { requiresAuth: true } },
+    { path: '/auth', component: Auth },
+    { path: '/profile', component: Profile },
+    { path: '/logout', component: Logout },
+    { path: '/NotFound', component: NotFound },
+    { path: '*', redirect: '/NotFound' }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  let currentUser = firebase.auth().currentUser
+  let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  if (currentUser) {
+    next()
+  } else {
+    if (requiresAuth) {
+      next('/auth')
+    } else {
+      next()
+    }
+  }
+})
+
+export default router

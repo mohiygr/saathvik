@@ -1,6 +1,6 @@
 # saathvik
 
-> Saathvik Food Website
+> SathvikFood website and app
 
 ## Build Setup
 
