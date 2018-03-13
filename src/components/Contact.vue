@@ -33,7 +33,7 @@
       </div>
     </div>
   <div class="container has-text-centered">
-  <h1 class="title">Or, Contact Us</h1>
+  <h1 class="title">Feedback Form</h1>
   </div>
     <div class="columns">
       <div class="column">
@@ -57,6 +57,14 @@
             <input class="input" v-bind:class="{'is-info': !isValidPhone}" placeholder="Phone" v-model="phone">
           </div>
           <p class="help" v-bind:class="{'is-info': !isValidPhone}" v-if="!isValidPhone">Please enter a 10 digit phone number.</p>
+        </div>
+        <div class="field">
+          <label class="label">PIN Code</label>
+          <p class="help">Enter the 6 digit PIN code of your locality where you need our service</p>
+          <div class="control">
+            <input class="input" v-bind:class="{'is-info': !isValidPIN}" placeholder="PIN Code" v-model="pincode">
+          </div>
+          <p class="help" v-bind:class="{'is-info': !isValidPIN}" v-if="!isValidPIN">Please enter a valid 6-digit PIN code (ex: 600044).</p>
         </div>
       </div>
       <div class="column">
@@ -88,6 +96,7 @@ export default {
       name: '',
       email: '',
       phone: '',
+      pincode: '',
       message: '',
       isLoading: false,
       isSubmitting: false
@@ -124,19 +133,14 @@ export default {
         return false
       }
     },
+    isValidPIN: function () {
+      return this.pincode.match(new RegExp(/^([0-9]){6}$/))
+    },
     isValidName: function () {
-      if (this.name.match(new RegExp(/^.+$/))) {
-        return true
-      } else {
-        return false
-      }
+      return this.name.match(new RegExp(/^.+$/))
     },
     isValidEmail: function () {
-      if (this.email.match(new RegExp(/^(.*?)@(.*?)\.(.+)$/))) {
-        return true
-      } else {
-        return false
-      }
+      return this.email.match(new RegExp(/^(.*?)@(.*?)\.(.+)$/))
     },
     ourphoneurl: function () {
       return 'tel://' + this.ourphone

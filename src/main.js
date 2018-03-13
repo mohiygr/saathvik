@@ -3,15 +3,17 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import Notifications from 'vue-notification'
 import Buefy from 'buefy'
+import VueScrollTo from 'vue-scrollto'
 import firebase from 'firebase'
 import router from './router'
 import {config} from './helpers/firebaseConfig'
 import 'buefy/lib/buefy.css'
-import 'bulma/css/bulma.css'
+// import 'bulma/css/bulma.css'
 
 Vue.use(VueRouter)
 Vue.use(Buefy)
 Vue.use(Notifications)
+Vue.use(VueScrollTo)
 
 let app
 

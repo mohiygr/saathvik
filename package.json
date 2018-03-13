@@ -4,9 +4,17 @@
   "description": "SathvikFood website and app",
   "author": "Suraj Kumar <suraj@sunson.in>",
   "private": true,
+  "proxy": {
+    "/meals": {
+      "target": "http://localhost:8081"
+    },
+    "/addmeal": {
+      "target": "http://localhost:8081"
+    }
+  },
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "start": "concurrently \"npm run dev\" \"npm start --prefix ./server\"",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
@@ -14,12 +22,15 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "buefy": "^0.6.3",
     "firebase": "^4.11.0",
     "firebaseui": "^2.6.2",
     "vue": "^2.5.2",
+    "vue-awesome": "^2.3.5",
     "vue-notification": "^1.3.7",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-scrollto": "^2.11.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -38,6 +49,7 @@
     "babel-register": "^6.22.0",
     "chalk": "^2.0.1",
     "chromedriver": "^2.27.2",
+    "concurrently": "^3.5.1",
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^5.0.1",
     "css-loader": "^0.28.0",
