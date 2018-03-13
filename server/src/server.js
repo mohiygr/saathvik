@@ -24,6 +24,7 @@ require('./CategoryRoutes')(app)
 require('./DishRoutes')(app)
 require('./MealRoutes')(app)
 require('./ComboRoutes')(app)
+require('./VueRoutes')(app)
 /***********************************/
 
 function myServerReadyMW (req, res, next) {

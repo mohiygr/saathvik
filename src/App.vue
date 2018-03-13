@@ -138,7 +138,6 @@ export default {
 }
 .mycontainer {
     margin-top: 50px;
-    background-color: #aafedd;
 }
 notifications {
     z-index: 999;
