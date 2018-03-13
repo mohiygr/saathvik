@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const serveStatic = require('serve-static')
 // mongoose.Promise = global.Promise
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/sathvik' // 'mongodb://webapp:W3bapp@ds111059.mlab.com:11059/sathvik'
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://webapp:W3bapp@ds111059.mlab.com:11059/sathvik'
 server_ready = false
 
 mongoose.connect(MONGO_URI, function (x, y) { if (!x) { server_ready = true; console.log('connected to mongodb://' + y.host + ':' + y.port + '/' + y.name + ' as ' + y.user) } })
