@@ -11,6 +11,12 @@ module.exports = function (app) {
   app.get('/contact', (req, res) => {
     doIt(res)
   })
+  app.get('/menu', (req, res) => {
+    doIt(res)
+  })
+  app.get('/profile', (req, res) => {
+    doIt(res)
+  })
   app.get('/about', (req, res) => {
     doIt(res)
   })

@@ -5,13 +5,25 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 const Keys = require('./keys')
 const serveStatic = require('serve-static')
+
+require('dotenv').config()
 mongoose.Promise = global.Promise
 
 console.log(Keys)
 
 const MONGO_URI = Keys['mongoURI']
+console.log('Mongo', MONGO_URI)
 server_ready = false
-mongoose.connect(MONGO_URI, function (x, y) { if (!x) { server_ready = true; console.log('connected to mongodb://' + y.host + ':' + y.port + '/' + y.name + ' as ' + y.user) } })
+mongoose.connect(MONGO_URI).
+  then(
+    (conn) => {
+      server_ready = true;
+      console.log('connected to mongodb.')
+    },
+    (err) => {
+      server_ready = false;
+      console.log('error connecting to mongo', err)
+    })
 
 const app = express()
 app.use(morgan('combined'))
@@ -36,11 +48,10 @@ function myServerReadyMW (req, res, next) {
   next(req, res)
 }
 
-//app.use(myServerReadyMW)
-
+app.use(myServerReadyMW)
 
 const port = process.env.PORT || Keys['port'] || 8081
 
-app.listen(port, function (err, app) { console.log('listening on port ' + port + ' ...') })
+app.listen(port, function (err, app) { console.log('listening for HTTP requests on port ' + port + ' ...') })
 
 
