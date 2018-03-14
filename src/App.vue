@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar is-primary myfloatingnav">
+    <nav class="navbar myfloatingnav">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/" v-bind:class="{'is-active': (currentMenu === 'Home')}">
           <img src="./assets/logo.png" alt="Sathvik Food" width="100">
@@ -128,5 +128,8 @@ export default {
 <style scoped>
 notifications {
     z-index: 999;
+}
+.mycontainer {
+  background-color: #dacaa9;
 }
 </style>

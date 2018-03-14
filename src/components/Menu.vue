@@ -5,50 +5,76 @@
         <div class="container">
           <div class="columns">
             <div class="column">
-              <div class="tabs is-rounded is-toggle">
-                <ul>
-                  <li v-bind:class="{'is-active':(activeCombo === combo)}" v-for="combo in combos" v-bind:key="combo._id">
-                    <a @click="activeCombo = combo">
-                      <span>{{combo.title}}</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div v-if="(activeCombo !== null)">
-                <div class="card mycard">
-                  <header class="card-header pattisollu">
-                    <p class="card-header-title">
-                      {{activeCombo.title}}
-                    </p>
-                    <a href="#" class="card-header-icon" aria-label="more options">
-                      <span class="icon">
-                        <i class="fas fa-angle-down" aria-hidden="true"></i>
-                      </span>
-                    </a>
-                  </header>
-                  <div class="card-content" v-if="(activeCombo !== null)">
-                    <div class="content">
-                      <div class="tags">
-                        <span class="tag is-rounded is-primary" v-for="cat in activeCombo.categories" v-bind:key="cat._id">{{cat.title}}</span>
-                      </div>
-                      <br>
-                    </div>
-                  </div>
-                  <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Save</a>
-                    <a href="#" class="card-footer-item">Edit</a>
-                    <a href="#" class="card-footer-item">Delete</a>
-                  </footer>
-                </div>
-              </div>
-              <div class="pattisollu" v-else>
-                <h1 class="title is-1 is-pulled-right">Welcome</h1>
+              <div class="pattisollu">
+                <h1 class="title is-2">Menu</h1>
+                <p class="subtitle is-3">We have <strong>{{categories.length}}</strong> categories of dishes, <strong>{{dishes.length}}</strong> different dishes and <strong>{{combos.length}}</strong> combo packages.</p>
+                <p class="subtitle is-3">Come, explore our rich menu!</p>
               </div>
             </div>
-            <div class="column">
+            <div class="column is-one-fifth">
               <figure class="image is-square">
                 <img src="../assets/chef.png">
               </figure>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-fullwidth">
+              <section class="is-fullwidth">
+                <b-tabs v-model="activeTab" type="is-toggle-rounded" size="is-large" :expanded=true :animated=true>
+                  <b-tab-item label="Categories">
+                    <section class="section">
+                      <div class="tags is-centered">
+                        <span class="tag is-large is-danger is-rounded" v-for="cat in categories" v-bind:key="cat._id">{{cat.title}}</span>
+                      </div>
+                    </section>
+                  </b-tab-item>
+                  <b-tab-item label="Dishes">
+                    <div class="container">
+                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                        <slide v-for="dish in dishes" v-bind:key="dish._id">
+                          <div class="box dishbox">
+                            <h1 class="title is-4">{{dish.title}}</h1>
+                            <h2 class="title is-5">₹{{dish.cost}}</h2>
+                            <p class="subtitle is-5">{{dish.category.title}}</p>
+                          </div>
+                        </slide>
+                      </carousel>
+                    </div>
+                  </b-tab-item>
+                  <b-tab-item label="Combo">
+                    <div class="container">
+                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                        <slide v-for="combo in combos" v-bind:key="combo._id">
+                          <div class="box dishbox">
+                            <h1 class="title is-4">{{combo.title}}</h1>
+                            <div class="tags">
+                              <span class="tag is-rounded is-primary is-medium" v-for="cat in combo.categories" v-bind:key="cat._id">
+                                {{cat.title}}
+                              </span>
+                            </div>
+                          </div>
+                        </slide>
+                      </carousel>
+                    </div>
+                  </b-tab-item>
+                  <b-tab-item label="Meals">
+                    <div class="container">
+                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                        <slide v-for="meal in meals" v-bind:key="meal._id">
+                          <div class="box dishbox">
+                            <h1 class="title is-4">{{meal.title}}</h1>
+                            <div class="box tags">
+                              <span class="tag is-rounded is-primary is-medium" v-for="dish in meal.dishes" v-bind:key="dish._id">
+                                {{dish.title}}
+                              </span>
+                            </div>
+                          </div>
+                        </slide>
+                      </carousel>
+                    </div>
+                  </b-tab-item>
+                </b-tabs>
+              </section>
             </div>
           </div>
         </div>
@@ -68,8 +94,9 @@ export default {
       categories: [],
       combos: [],
       dishes: [],
-      currentMeal: null,
-      activeCombo: null
+      activeMeal: null,
+      activeCombo: null,
+      activeTab: 1
     }
   },
   created () {
@@ -81,21 +108,21 @@ export default {
       this.categories = []
       this.combos = []
       this.dishes = []
-      this.currentMeal = null
+      this.activeMeal = null
     },
     prevMeal: function () {
       if (this.meals.length >= 1) {
-        if (this.currentMeal) {
+        if (this.activeMeal) {
           // something is already selected, find out its position in list
-          var idx = this.meals.indexOf(this.currentMeal)
+          var idx = this.meals.indexOf(this.activeMeal)
           if ((idx - 1) < 0) {
             idx = this.meals.length - 1
           } else {
             idx = idx - 1
           }
-          this.currentMeal = this.meals[idx]
+          this.activeMeal = this.meals[idx]
         } else {
-          this.currentMeal = this.meals[this.meals.length - 1]
+          this.activeMeal = this.meals[this.meals.length - 1]
         }
       } else {
         console.log('meals is empty! why?!')
@@ -103,17 +130,17 @@ export default {
     },
     nextMeal: function () {
       if (this.meals.length >= 1) {
-        if (this.currentMeal) {
+        if (this.activeMeal) {
           // something is already selected, find out its position in list
-          var idx = this.meals.indexOf(this.currentMeal)
+          var idx = this.meals.indexOf(this.activeMeal)
           if ((idx + 1) < (this.meals.length - 1)) {
             idx = this.meals.length - 1
           } else {
             idx = idx + 1
           }
-          this.currentMeal = this.meals[idx]
+          this.activeMeal = this.meals[idx]
         } else {
-          this.currentMeal = this.meals[this.meals.length - 1]
+          this.activeMeal = this.meals[this.meals.length - 1]
         }
       } else {
         console.log('meals is empty! why?!')
@@ -171,15 +198,19 @@ export default {
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Indie+Flower');
+@import url('https://fonts.googleapis.com/css?family=Satisfy');
 
-  .pattisollu {
-  font-family: 'Indie Flower', cursive;
-  }
-  .mycontainer {
-  background-color: #ffa3a3
-  }
-  .mycard {
-  background-color: #aa8383
-  }
+.pattisollu {
+  font-family: 'Satisfy', cursive;
+  font-size: 24px;
+}
+.mycard {
+  background-color: #caba99
+}
+.dishbox {
+  margin: 15px;
+}
+.strong {
+  color: #aa0011;
+}
 </style>

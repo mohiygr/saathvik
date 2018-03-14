@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="container mycontainer">
+  <div class="container mycontainer2">
     <section class="hero">
       <div class="hero-body">
         <div class="container">
@@ -60,8 +60,8 @@ export default {
 }
 </script>
 
-<style>
-.mycontainer {
-  background-color: #f4ff99;
+<style scoped>
+.mycontainer2 {
+  background-color: #a9ff99;
 }
 </style>
