@@ -1,12 +1,5 @@
 runtime: nodejs
 env: flex
 
-steps:
-- name: 'gcr.io/sathvikfood-104e0/npm'
-  args: ['run', 'build']
-- name: 'gcr.io/sathvikfood-104e0/npm'
-  args: ['install']
-  dir: 'server'
-
 
 
