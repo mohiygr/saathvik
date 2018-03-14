@@ -3,12 +3,14 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
+const Keys = require('./keys')
 const serveStatic = require('serve-static')
-// mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://webapp:W3bapp@ds111059.mlab.com:11059/sathvik'
+console.log(Keys)
+
+const MONGO_URI = Keys['mongoURI']
 server_ready = false
-
 mongoose.connect(MONGO_URI, function (x, y) { if (!x) { server_ready = true; console.log('connected to mongodb://' + y.host + ':' + y.port + '/' + y.name + ' as ' + y.user) } })
 
 const app = express()
@@ -37,7 +39,7 @@ function myServerReadyMW (req, res, next) {
 //app.use(myServerReadyMW)
 
 
-const port = process.env.PORT || 8081
+const port = process.env.PORT || Keys['port'] || 8081
 
 app.listen(port, function (err, app) { console.log('listening on port ' + port + ' ...') })
 

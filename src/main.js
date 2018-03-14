@@ -9,6 +9,7 @@ import router from './router'
 import {config} from './helpers/firebaseConfig'
 import 'buefy/lib/buefy.css'
 // import 'bulma/css/bulma.css'
+import 'vue-material-design-icons/styles.css'
 
 Vue.use(VueRouter)
 Vue.use(Buefy)

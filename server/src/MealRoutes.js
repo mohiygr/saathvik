@@ -21,7 +21,7 @@ module.exports = function (app) {
             combo: req.body.combo,
             cost: req.body.cost
           }).save().then(
-            (o) => { console.log("SAVED", o); res.send({status: 'ok', created: o}) },
+            (o) => { res.send({status: 'ok', created: o}) },
             (e) => { console.log("Error", e); res.send({status: 'error', message: 'could not save new Meal'}) })
         }
       } else {
@@ -37,7 +37,6 @@ module.exports = function (app) {
       .populate('combo')
       .exec()
       .then((dbres) => {
-        console.log("Meals", dbres)
         res.send(JSON.stringify(dbres, null, 2))
       }, (err) => {
         console.log("Error", err);

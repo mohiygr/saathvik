@@ -126,19 +126,6 @@ export default {
 </script>
 
 <style scoped>
-.myfloatingnav {
-    z-index: 995;
-    position: fixed;
-    display: flex;
-    top: 0;
-    width: 100%;
-    height: 72px;
-    flex-direction: row;
-    background-color: #7ba
-}
-.mycontainer {
-    margin-top: 50px;
-}
 notifications {
     z-index: 999;
 }

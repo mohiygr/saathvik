@@ -33,7 +33,6 @@ module.exports = function (app) {
       .populate('categories')
       .exec()
       .then((dbres) => {
-        console.log("/combos response", dbres)
         res.send(dbres)
       }, (err) => {
         console.log("MY Error", err);

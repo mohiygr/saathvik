@@ -8,10 +8,10 @@
         </div>
       </div>
     </div>
-    <div class="columns">
-      <div class="column">
-        <div class="columns">
-          <div class="column is-one-third">
+    <div class="columns is-centered">
+      <div class="column is-one-third">
+        <div class="columns is-centered">
+          <div class="column">
             <h1 id="#form" class="title is-3">Dishes</h1>
             <div v-if="isError" class="notification is-danger">
               <button @click="isError = false" class="delete"></button>
@@ -23,35 +23,41 @@
             </div>
           </div>
         </div>
-        <div class="columns is-centered">
-          <div class="column is-vcentered">
-            <div class="field">
-              <div class="control">
-                <input type="text" ref="title" id="title" class="input" v-bind:class="{'mybox':!isValidTitle}" placeholder="Title" v-model="title" @keyup.enter="addDish">
-                <p class="help" v-bind:class="{'is-info': !isValidTitle}" v-if="!isValidTitle">Please fill a valid Title.</p>
+        <div class="columns">
+          <div class="column is-centered">
+            <div class="box">
+              <div class="field">
+                <div class="control">
+                  <input type="text" ref="title" id="title" class="input" v-bind:class="{'mybox':!isValidTitle}" placeholder="Title" v-model="title" @keyup.enter="addDish">
+                  <p class="help" v-bind:class="{'is-info': !isValidTitle}" v-if="!isValidTitle">Please fill a valid Title.</p>
+                </div>
               </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                <input type="text" ref="cost" class="input" v-bind:class="{'mybox':!isValidCost}" placeholder="Cost" v-model="cost" @keyup.enter="addDish">
-                <p class="help" v-bind:class="{'is-info': !isValidCost}" v-if="!isValidCost">Please fill a valid Cost.</p>
+              <div class="field">
+                <div class="control">
+                  <input type="text" ref="cost" class="input" v-bind:class="{'mybox':!isValidCost}" placeholder="Cost" v-model="cost" @keyup.enter="addDish">
+                  <p class="help" v-bind:class="{'is-info': !isValidCost}" v-if="!isValidCost">Please fill a valid Cost.</p>
+                </div>
               </div>
-            </div>
-            <div class="field">
-              <div class="control">
-                <b-select placeholder="Select a Category" ref="category" class="select" v-model="category">
-                  <option v-bind:value="cat" v-for="cat in categories" v-bind:key="cat._id">{{cat.title}}</option>
-                </b-select>
+              <div class="field">
+                <div class="control">
+                  <b-select placeholder="Select a Category" ref="category" class="select" v-model="category">
+                    <option v-bind:value="cat" v-for="cat in categories" v-bind:key="cat._id">{{cat.title}}</option>
+                  </b-select>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="column">
-            <div class="field">
-  <button v-bind:class="{'is-loading': isAdding}" v-bind:disabled="!isFormReady" @click="addDish" class="button is-primary is-medium is-rounded">{{AddOrEdit}}</button>
-  <button class="button is-rounded is-transparent" v-if="(AddOrEdit == 'Update')" @click="dishId = null; category = null; title = ''; categoryBeforeUpdate = null; cost = ''; titleBeforeUpdate = ''">cancel</button>
             </div>
           </div>
         </div>
+        <div class="columns is-centered">
+          <div class="column">
+            <div class="field">
+              <button v-bind:class="{'is-loading': isAdding}" v-bind:disabled="!isFormReady" @click="addDish" class="button is-primary is-medium is-rounded">{{AddOrEdit}}</button>
+              <button class="button is-rounded is-transparent" v-if="(AddOrEdit == 'Update')" @click="dishId = null; category = null; title = ''; categoryBeforeUpdate = null; cost = ''; titleBeforeUpdate = ''">cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns">
         <div class="column">
           <div class="box">
             <table class="table mytable is-fullwidth table-striped">
