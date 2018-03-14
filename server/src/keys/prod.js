@@ -1,4 +1,4 @@
 module.exports = {
-  mongoURI: process.env.MONGO_URI,
-  port: process.env.PORT
+  mongoURI: 'mongodb://webapp:W3bapp@ds111059.mlab.com:11059/sathvik',
+  port: 8080
 }
