@@ -6,9 +6,9 @@
           <div class="columns">
             <div class="column">
               <div class="pattisollu">
-                <h1 class="title is-3">Menu</h1>
-                <p class="subtitle is-4">We have <strong>{{categories.length}}</strong> categories of dishes, <strong>{{dishes.length}}</strong> different dishes and <strong>{{combos.length}}</strong> combo packages.</p>
-                <p class="subtitle is-4">Come, explore our rich menu!</p>
+                <h1 class="title is-2">Menu</h1>
+                <p class="subtitle is-3">We have <strong>{{categories.length}}</strong> categories of dishes, <strong>{{dishes.length}}</strong> different dishes and <strong>{{combos.length}}</strong> combo packages.</p>
+                <p class="subtitle is-3">Come, explore our rich menu!</p>
               </div>
             </div>
             <div class="column is-one-fifth">
