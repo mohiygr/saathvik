@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar myfloatingnav">
+    <nav class="navbar mynav">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/" v-bind:class="{'is-active': (currentMenu === 'Home')}">
           <img src="./assets/logo.png" alt="Sathvik Food" width="100">
@@ -13,7 +13,7 @@
       </div>
       <div id="mymenubar" class="navbar-menu" v-bind:class="{ 'is-active' : burgerToggle }">
         <div class="navbar-start">
-  <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'About')}" to="/about">
+          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'About')}" to="/about">
             About
           </router-link>
           <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Menu')}" to="/menu">
@@ -131,5 +131,14 @@ notifications {
 }
 .mycontainer {
   background-color: #dacaa9;
+}
+.mynav, .mynav .navbar-dropdown {
+background-color: #154668;
+}
+.mynav .navbar-item, .navbar-link {
+color: #abdeee;
+}
+.mynav .navbar-link:hover, .navbar-item:hover {
+color:#225560;
 }
 </style>

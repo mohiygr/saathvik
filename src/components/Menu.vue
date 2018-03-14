@@ -20,22 +20,22 @@
           <div class="columns">
             <div class="column is-fullwidth">
               <section class="is-fullwidth">
-                <b-tabs v-model="activeTab" type="is-toggle-rounded" size="is-large" :expanded=true :animated=true>
+                <b-tabs v-model="activeTab" type="is-toggle-rounded" size="is-medium" :expanded=true :animated=true>
                   <b-tab-item label="Categories">
                     <section class="section">
                       <div class="tags is-centered">
-                        <span class="tag is-large is-danger is-rounded" v-for="cat in categories" v-bind:key="cat._id">{{cat.title}}</span>
+                        <span class="tag is-medium is-danger is-rounded" v-for="cat in categories" v-bind:key="cat._id">{{cat.title}}</span>
                       </div>
                     </section>
                   </b-tab-item>
                   <b-tab-item label="Dishes">
                     <div class="container">
-                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                      <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
                         <slide v-for="dish in dishes" v-bind:key="dish._id">
                           <div class="box dishbox">
-                            <h1 class="title is-4">{{dish.title}}</h1>
-                            <h2 class="title is-5">₹{{dish.cost}}</h2>
-                            <p class="subtitle is-5">{{dish.category.title}}</p>
+                            <h1 class="title is-5">{{dish.title}}</h1>
+                            <h2 class="title is-6">₹{{dish.cost}}</h2>
+                            <p class="subtitle is-6">{{dish.category.title}}</p>
                           </div>
                         </slide>
                       </carousel>
@@ -43,29 +43,13 @@
                   </b-tab-item>
                   <b-tab-item label="Combo">
                     <div class="container">
-                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                      <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" navigation-enabled="true" autoplay="true" autoplay-hover-pause="true" autoplay-timeout="5000">
                         <slide v-for="combo in combos" v-bind:key="combo._id">
                           <div class="box dishbox">
                             <h1 class="title is-4">{{combo.title}}</h1>
                             <div class="tags">
                               <span class="tag is-rounded is-primary is-medium" v-for="cat in combo.categories" v-bind:key="cat._id">
                                 {{cat.title}}
-                              </span>
-                            </div>
-                          </div>
-                        </slide>
-                      </carousel>
-                    </div>
-                  </b-tab-item>
-                  <b-tab-item label="Meals">
-                    <div class="container">
-                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
-                        <slide v-for="meal in meals" v-bind:key="meal._id">
-                          <div class="box dishbox">
-                            <h1 class="title is-4">{{meal.title}}</h1>
-                            <div class="box tags">
-                              <span class="tag is-rounded is-primary is-medium" v-for="dish in meal.dishes" v-bind:key="dish._id">
-                                {{dish.title}}
                               </span>
                             </div>
                           </div>

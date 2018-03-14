@@ -7,7 +7,8 @@
             <div class="column">
               <div class="pattisollu">
                 <h1 class="title is-2">Menu</h1>
-                <p class="subtitle is-3">We have <strong>{{categories.length}}</strong> categories of dishes, <strong>{{dishes.length}}</strong> different dishes and <strong>{{combos.length}}</strong> combo packages.</p>
+                <p class="subtitle is-3" v-if="pendingLoads === 0">We have <strong>{{categories.length}}</strong> categories of dishes, <strong>{{dishes.length}}</strong> different dishes and <strong>{{combos.length}}</strong> combo packages.</p>
+                <p class="subtitle is-3" v-else>We have a huge variety of dishes to appeal to you. <a class="button" @click="refresh">View</a></p>
                 <p class="subtitle is-3">Come, explore our rich menu!</p>
               </div>
             </div>
@@ -30,7 +31,7 @@
                   </b-tab-item>
                   <b-tab-item label="Dishes">
                     <div class="container">
-                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                      <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
                         <slide v-for="dish in dishes" v-bind:key="dish._id">
                           <div class="box dishbox">
                             <h1 class="title is-4">{{dish.title}}</h1>
@@ -43,29 +44,13 @@
                   </b-tab-item>
                   <b-tab-item label="Combo">
                     <div class="container">
-                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                      <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
                         <slide v-for="combo in combos" v-bind:key="combo._id">
                           <div class="box dishbox">
                             <h1 class="title is-4">{{combo.title}}</h1>
                             <div class="tags">
                               <span class="tag is-rounded is-primary is-medium" v-for="cat in combo.categories" v-bind:key="cat._id">
                                 {{cat.title}}
-                              </span>
-                            </div>
-                          </div>
-                        </slide>
-                      </carousel>
-                    </div>
-                  </b-tab-item>
-                  <b-tab-item label="Meals">
-                    <div class="container">
-                      <carousel :per-page=4 :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
-                        <slide v-for="meal in meals" v-bind:key="meal._id">
-                          <div class="box dishbox">
-                            <h1 class="title is-4">{{meal.title}}</h1>
-                            <div class="box tags">
-                              <span class="tag is-rounded is-primary is-medium" v-for="dish in meal.dishes" v-bind:key="dish._id">
-                                {{dish.title}}
                               </span>
                             </div>
                           </div>
@@ -106,6 +91,7 @@ export default {
   name: 'Home',
   data () {
     return {
+      pendingLoads: 4,
       meals: [],
       categories: [],
       combos: [],
@@ -120,47 +106,12 @@ export default {
   },
   methods: {
     reset: function () {
+      this.pendingLoads = 4
       this.meals = []
       this.categories = []
       this.combos = []
       this.dishes = []
       this.activeMeal = null
-    },
-    prevMeal: function () {
-      if (this.meals.length >= 1) {
-        if (this.activeMeal) {
-          // something is already selected, find out its position in list
-          var idx = this.meals.indexOf(this.activeMeal)
-          if ((idx - 1) < 0) {
-            idx = this.meals.length - 1
-          } else {
-            idx = idx - 1
-          }
-          this.activeMeal = this.meals[idx]
-        } else {
-          this.activeMeal = this.meals[this.meals.length - 1]
-        }
-      } else {
-        console.log('meals is empty! why?!')
-      }
-    },
-    nextMeal: function () {
-      if (this.meals.length >= 1) {
-        if (this.activeMeal) {
-          // something is already selected, find out its position in list
-          var idx = this.meals.indexOf(this.activeMeal)
-          if ((idx + 1) < (this.meals.length - 1)) {
-            idx = this.meals.length - 1
-          } else {
-            idx = idx + 1
-          }
-          this.activeMeal = this.meals[idx]
-        } else {
-          this.activeMeal = this.meals[this.meals.length - 1]
-        }
-      } else {
-        console.log('meals is empty! why?!')
-      }
     },
     refresh: function () {
       var vm = this
@@ -171,6 +122,7 @@ export default {
             resp.data.forEach(function (m) {
               vm.meals.push(m)
             })
+            this.pendingLoads -= 1
           },
           (err) => {
             console.log('Error in fetching Meals', err)
@@ -182,6 +134,7 @@ export default {
             resp.data.forEach(function (c) {
               vm.categories.push(c)
             })
+            vm.pendingLoads -= 1
           },
           (err) => {
             console.log('Error in fetching Meals', err)
@@ -193,6 +146,7 @@ export default {
             resp.data.forEach(function (d) {
               vm.dishes.push(d)
             })
+            vm.pendingLoads -= 1
           },
           (err) => {
             console.log('Error in fetching Meals', err)
@@ -204,6 +158,7 @@ export default {
             resp.data.forEach(function (c) {
               vm.combos.push(c)
             })
+            vm.pendingLoads -= 1
           },
           (err) => {
             console.log('Error in fetching Meals', err)
