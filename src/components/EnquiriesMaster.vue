@@ -29,7 +29,14 @@
         </div>
       </div>
     </b-modal>
-      <h1 class="title">Enquiries</h1>
+      <h1 class="title has-text-centered">Enquiries</h1>
+      <div class="level has-text-centered">
+        <div class="level-item">
+          <div class="content box">
+            <h2 class="subtitle is-5">{{enquiries.length}} Messages</h2>
+          </div>
+        </div>
+      </div>
     <b-table
        :data="enquiries">
 

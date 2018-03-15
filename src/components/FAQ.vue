@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="section">
     <h1 class="title">FAQ</h1>
-    <div class="columns" v-for="(faq, idx) in faqs" :key="faq._id">
+    <div class="columns" v-for="faq in faqs" :key="faq._id">
       <div class="column">
         <div class="content5B">
           <b-collapse class="card" :open="false">

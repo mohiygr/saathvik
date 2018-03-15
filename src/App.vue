@@ -63,6 +63,7 @@
 
 <script>
 import firebase from 'firebase'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -113,15 +114,15 @@ export default {
     } else {
       this.user = u
       console.log('App:User', u)
-      firebase.database().ref('admin').child('ouradmin')
-        .once('value')
+      axios.get('/settings/admin.uid')
         .then(
           function (o) {
-            if (o.val()) {
-              if (u.uid === o.val()) {
+            console.log('Got setting', o.data)
+            if (o.data.length === 1) {
+              if (u.uid === o.data[0].value) {
                 vm.isAdmin = true
                 vm.$notify({group: 'app', type: 'warning', text: 'is Admin!'})
-                console.log('is an admin')
+                console.log('is an admin', o.data)
               } else {
                 vm.$notify({group: 'app', text: 'is NOT Admin!'})
               }

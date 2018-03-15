@@ -11,6 +11,18 @@ module.exports = function (app) {
         (e) => { console.log("Error", e); res.send({status: 'error', message: 'could not save new Setting'}) })
     }
   })
+
+  app.get('/settings/:key', (req, res) => {
+    Setting.find({key: req.params.key})
+      .exec()
+      .then(
+        (dbres) => {
+          res.send(dbres)
+        },
+        (err) => {
+          console.log('Error getting ' + req.params.ey, err)
+        })
+  })
   
   app.get('/settings', (req, res) => {
     Setting.find({})

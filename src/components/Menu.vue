@@ -30,7 +30,7 @@
                   </b-tab-item>
                   <b-tab-item label="Dishes">
                     <div class="container">
-                      <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" :navigation-enabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                      <carousel :pagination=false :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" :navigationEnabled=true :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
                         <slide v-for="dish in dishes" v-bind:key="dish._id">
                           <div class="box dishbox">
                             <h1 class="title is-5">{{dish.title}}</h1>
@@ -43,13 +43,32 @@
                   </b-tab-item>
                   <b-tab-item label="Combo">
                     <div class="container">
-                      <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" navigation-enabled="true" autoplay="true" autoplay-hover-pause="true" autoplay-timeout="5000">
+  <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" :navigationEnabled=true :autoplay=true :autoplayHoverPause=true :autoplayTimeout=5000>
                         <slide v-for="combo in combos" v-bind:key="combo._id">
                           <div class="box dishbox">
                             <h1 class="title is-4">{{combo.title}}</h1>
                             <div class="tags">
                               <span class="tag is-rounded is-primary is-medium" v-for="cat in combo.categories" v-bind:key="cat._id">
                                 {{cat.title}}
+                              </span>
+                            </div>
+                          </div>
+                        </slide>
+                      </carousel>
+                    </div>
+                  </b-tab-item>
+                  <b-tab-item label="Meals">
+                    <div class="container">
+                      <carousel :per-page=1 :perPageCustom="[[480,2],[768,3],[1024,4]]" :autoplay=true :autoplay-hover-pause=true :autoplay-timeout=5000>
+                        <slide v-for="meal in meals" v-bind:key="meal._id">
+                          <div class="box dishbox">
+                            <h1 class="title is-4">
+                              {{meal.title}}
+                              <span class="heading"> &#8377;{{mealCost(meal)}}</span>
+                            </h1>
+                            <div class="tags">
+                              <span class="tag is-rounded is-primary is-medium" v-for="dish in meal.dishes" v-bind:key="dish._id">
+                                {{dish.title}}
                               </span>
                             </div>
                           </div>
@@ -87,6 +106,13 @@ export default {
     this.refresh()
   },
   methods: {
+    mealCost: function (meal) {
+      var cost = 0
+      meal.dishes.forEach(function (m) {
+        cost += m.cost
+      })
+      return cost
+    },
     reset: function () {
       this.meals = []
       this.categories = []
