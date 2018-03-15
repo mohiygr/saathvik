@@ -13,14 +13,6 @@
         <div class="columns is-centered">
           <div class="column">
             <h1 id="#form" class="title is-3">Dishes</h1>
-            <div v-if="isError" class="notification is-danger">
-              <button @click="isError = false" class="delete"></button>
-              {{notify}}
-            </div>
-            <div v-if="isSuccess" class="notification is-success">
-              <button @click="isSuccess = false" class="delete"></button>
-              {{notify}}
-            </div>
           </div>
         </div>
         <div class="columns">
@@ -28,19 +20,19 @@
             <div class="box">
               <div class="field">
                 <div class="control">
-                  <input type="text" ref="title" id="title" class="input" v-bind:class="{'mybox':!isValidTitle}" placeholder="Title" v-model="title" @keyup.enter="addDish">
+                  <input type="text" ref="title" id="title" class="input" v-bind:class="{'mybox':!isValidTitle}" placeholder="Title" v-model="dish.title" @keyup.enter="addDish">
                   <p class="help" v-bind:class="{'is-info': !isValidTitle}" v-if="!isValidTitle">Please fill a valid Title.</p>
                 </div>
               </div>
               <div class="field">
                 <div class="control">
-                  <input type="text" ref="cost" class="input" v-bind:class="{'mybox':!isValidCost}" placeholder="Cost" v-model="cost" @keyup.enter="addDish">
+                  <input type="text" ref="cost" class="input" v-bind:class="{'mybox':!isValidCost}" placeholder="Cost" v-model="dish.cost" @keyup.enter="addDish">
                   <p class="help" v-bind:class="{'is-info': !isValidCost}" v-if="!isValidCost">Please fill a valid Cost.</p>
                 </div>
               </div>
               <div class="field">
                 <div class="control">
-                  <b-select placeholder="Select a Category" ref="category" class="select" v-model="category">
+                  <b-select placeholder="Select a Category" ref="category" class="select" v-model="dish.category">
                     <option v-bind:value="cat" v-for="cat in categories" v-bind:key="cat._id">{{cat.title}}</option>
                   </b-select>
                 </div>
@@ -52,7 +44,7 @@
           <div class="column">
             <div class="field">
               <button v-bind:class="{'is-loading': isAdding}" v-bind:disabled="!isFormReady" @click="addDish" class="button is-primary is-medium is-rounded">{{AddOrEdit}}</button>
-              <button class="button is-rounded is-transparent" v-if="(AddOrEdit == 'Update')" @click="dishId = null; category = null; title = ''; categoryBeforeUpdate = null; cost = ''; titleBeforeUpdate = ''">cancel</button>
+              <button class="button is-rounded is-transparent" v-if="(AddOrEdit == 'Update')" @click="resetDish">cancel</button>
             </div>
           </div>
         </div>
@@ -67,11 +59,11 @@
                 <td class="thead is-pulled-right">Cost</td>
                 <td class="thead">Actions</td>
               </tr>
-              <tr class="tr" v-for="dish in dishes" v-bind:key="dish._id">
-                <td class="td"><h1 class="title is-4">{{dish.title}}</h1></td>
-                <td class="td"><h1 class="title is-4" v-if="dish.category">{{dish.category.title}}</h1></td>
-                <td class="td is-pulled-right"><h1 class="title is-4">{{dish.cost}}</h1></td>
-                <td class="td"><button v-bind:disabled="(dish._id === dishId)" class="button is-small is-link is-rounded" @click="editDish(dish)">Edit</button> <button @click="deleteDish(dish)" class="button is-small is-danger is-rounded">X</button></td>
+              <tr class="tr" v-for="d in dishes" v-bind:key="d._id">
+                <td class="td"><h1 class="title is-4">{{d.title}}</h1></td>
+                <td class="td"><h1 class="title is-4" v-if="d.category">{{d.category.title}}</h1></td>
+                <td class="td is-pulled-right"><h1 class="title is-4">{{d.cost}}</h1></td>
+                <td class="td"><button v-bind:disabled="(dish._id === d._id)" class="button is-small is-link is-rounded" @click="editDish(d)">Edit</button> <button @click="deleteDish(d)" class="button is-small is-danger is-rounded">X</button></td>
               </tr>
             </table>
           </div>
@@ -91,46 +83,65 @@ export default {
   },
   data () {
     return {
-      isError: false,
-      isSuccess: false,
       isAdding: false,
       categories: [],
       dishes: [],
-      cost: '',
-      category: null,
-      dishId: null, // means, "new", else means "Edit" to given id
-      selectedCat: null,
-      title: '',
-      titleBeforeUpdate: ''
+      dish: {
+        title: '',
+        cost: '0'
+      }
     }
   },
   computed: {
     isValidTitle: function () {
-      return this.title.match(new RegExp(/^.+$/))
+      return this.dish.title.match(new RegExp(/^.+$/))
     },
     isValidCost: function () {
-      return this.cost.toString().match(new RegExp(/^\d+(\.\d+)*$/))
+      return this.dish.cost.toString().match(new RegExp(/^\d+(\.\d+)*$/))
     },
     isValidCategory: function () {
-      return (this.category !== null)
+      return (this.dish.category !== null)
     },
     isFormReady: function () {
       return this.isValidTitle &&
-        (this.cost !== this.costBeforeUpdate ||
-         this.title !== this.titleBeforeUpdate ||
-         this.category !== this.categoryBeforeUpdate) &&
         this.isValidCategory &&
         this.isValidCost
     },
     AddOrEdit: function () {
-      return (this.dishId ? 'Update' : 'Add')
+      return (this.dish._id ? 'Update' : 'Add')
     }
   },
   methods: {
+    resetDish: function () {
+      this.dish = {
+        title: '',
+        cost: '0',
+        category: null
+      }
+    },
+    successMsg: function (msg) {
+      this.$toast.open({
+        duration: 5000,
+        message: msg,
+        queue: true,
+        type: 'is-success',
+        position: 'is-bottom'
+      })
+    },
+    infoMsg: function (msg) {
+      this.$toast.open({
+        duration: 1000,
+        message: msg,
+        queue: false,
+        type: 'is-success',
+        position: 'is-top'
+      })
+    },
     refresh: function () {
       this.dishes = []
       this.categories = []
       var vm = this
+      vm.infoMsg('Fetching data...')
       axios.get('/categories')
         .then(
           (resp) => {
@@ -157,49 +168,30 @@ export default {
     addDish: function () {
       var vm = this
       this.isAdding = true
-      var newDish = { title: this.title, category: this.category, cost: this.cost }
-      console.log('Dish before update', newDish)
+      console.log('Dish before update', this.dish)
 
-      if (this.dishId) { // update an existing object
-        axios.put('/dishes/' + this.dishId, newDish)
+      if (this.dish._id) { // update an existing object
+        axios.put('/dishes/' + this.dish._id, this.dish)
           .then(
             (resp) => {
-              console.log('update existing dish ' + vm.dishId, resp)
-              vm.dishId = null
-              vm.category = null
+              console.log('update existing dish ' + vm.dish._id, resp)
               vm.isAdding = false
-              vm.isError = false
-              vm.title = ''
-              vm.selectedCat = null
-              vm.cost = ''
-              vm.isSuccess = true
-              vm.notify = 'Updated!'
+              vm.successMsg('Updated')
+              vm.resetDish()
               vm.refresh()
             },
             (err) => {
               console.log('Error updating Dish', err)
-              vm.notify = 'could not update. Please try again'
-              vm.isError = true
-              vm.dishId = null
-              vm.category = null
-              vm.title = ''
-              vm.cost = ''
-              vm.selectedCat = null
-              vm.cost = null
+              vm.successMsg('Failed to update')
               vm.isAdding = false
             })
       } else { // post a new object
-        axios.post('/dishes', newDish)
+        axios.post('/dishes', this.dish)
           .then(
             (resp) => {
               console.log('created new dish', resp)
               vm.isAdding = false
-              vm.isError = false
-              vm.isSuccess = true
-              vm.notify = 'Added!'
-              vm.category = null
-              vm.cost = ''
-              vm.title = ''
+              vm.resetDish()
               vm.refresh()
             },
             (err) => {
@@ -219,7 +211,6 @@ export default {
           console.log('Deleted', resp)
           vm.isAdding = false
           vm.isSuccess = true
-          vm.notify = 'Successfully deleted "' + title + '"'
           vm.refresh()
         },
         (err) => {
@@ -230,16 +221,7 @@ export default {
         })
     },
     editDish: function (dish) {
-      this.dishId = dish._id
-      this.category = dish.category
-      this.selectedCat = dish.category
-      // find in categories, catId and set title to that
-      this.title = dish.title
-      this.cost = dish.cost
-      this.titleBeforeUpdate = dish.title
-      this.categoryBeforeUpdate = dish.category
-      this.costBeforeUpdate = dish.cost
-
+      this.dish = dish
       this.$scrollTo(document.getElementById('#form'), { offset: -100 })
     }
   }

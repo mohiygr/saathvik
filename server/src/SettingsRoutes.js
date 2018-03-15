@@ -26,9 +26,10 @@ module.exports = function (app) {
   
   app.get('/settings', (req, res) => {
     Setting.find({})
+      .sort({'key':'asc'})
       .exec()
       .then((dbres) => {
-        res.send(JSON.stringify(dbres, null, 2))
+        res.send(dbres)
       }, (err) => {
         console.log("Error", err);
         res.send({status: 'error', message: 'error occurred fetching list of settings'})

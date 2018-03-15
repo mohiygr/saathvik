@@ -1,6 +1,10 @@
 <template lang="html">
-  <div>
-    <div id="firebaseui-auth-container"></div>
+  <div class="hero is-fullheight is-vcentered">
+    <div class="hero-body">
+      <div class="container">
+        <div id="firebaseui-auth-container"></div>
+      </div>
+    </div>
   </div>
 </template>
 

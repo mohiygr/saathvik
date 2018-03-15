@@ -30,10 +30,11 @@ module.exports = function (app) {
 
   app.get('/combos', (req, res) => {
     Combo.find()
+      .sort({'title': 'asc'})
       .populate('categories')
       .exec()
       .then((dbres) => {
-        res.send(JSON.stringify(dbres, null, 2))
+        res.send(dbres)
       }, (err) => {
         console.log("MY Error", err);
         res.send({status: 'error', message: 'error occurred fetching list of combos'})

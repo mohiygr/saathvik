@@ -13,16 +13,16 @@
       </div>
       <div id="mymenubar" class="navbar-menu" v-bind:class="{ 'is-active' : burgerToggle }">
         <div class="navbar-start">
-          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'About')}" to="/about">
+          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'About')}" @click.native="closeBurger" to="/about">
             About
           </router-link>
-          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Menu')}" to="/menu">
+          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Menu')}" @click.native="closeBurger" to="/menu">
             Menu
           </router-link>
-          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'FAQ')}" to="/faq">
+          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'FAQ')}" @click.native="closeBurger" to="/faq">
             FAQ
           </router-link>
-          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Contact')}" to="/contact">
+          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Contact')}" @click.native="closeBurger" to="/contact">
             Contact
           </router-link>
         </div>
@@ -30,22 +30,22 @@
           <div class="navbar-item has-dropdown is-hoverable" v-if="isAdmin">
             <a class="navbar-link">Admin</a>
             <div class="navbar-dropdown">
-              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Categories')}" to="/catmaster" v-if="user">Categories</router-link>
-              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Dishes')}" to="/dishmaster" v-if="user">Dishes</router-link>
-              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Combos')}" to="/combomaster" v-if="user">Combos</router-link>
-              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Meals')}" to="/mealmaster" v-if="user">Meals</router-link>
-              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'FAQMaster')}" to="/faqmaster" v-if="user">FAQ Master</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Categories')}" @click.native="closeBurger" to="/catmaster" v-if="user">Categories</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Dishes')}" @click.native="closeBurger" to="/dishmaster" v-if="user">Dishes</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Combos')}" @click.native="closeBurger" to="/combomaster" v-if="user">Combos</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Meals')}" @click.native="closeBurger" to="/mealmaster" v-if="user">Meals</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'FAQMaster')}" @click.native="closeBurger" to="/faqmaster" v-if="user">FAQ Master</router-link>
               <hr class="navbar-divider">
-              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Enquiries')}" to="/enquiriesmaster" v-if="user">Enquiries</router-link>
-              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Settings')}" to="/admin" v-if="user">Settings</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Enquiries')}" @click.native="closeBurger" to="/enquiriesmaster" v-if="user">Enquiries</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Settings')}" @click.native="closeBurger" to="/admin" v-if="user">Settings</router-link>
             </div>
           </div>
           <div class="navbar-item has-dropdown is-hoverable" v-bind:class="{'is-active': (currentMenu === 'Account')}">
             <a class="navbar-link">Account</a>
             <div class="navbar-dropdown">
-              <router-link class="navbar-item" to="/profile">Profile</router-link>
-              <router-link class="navbar-item" to="/logout" v-if="user">Logout</router-link>
-              <router-link class="navbar-item" to="/auth" v-if="!user">Login</router-link>
+              <router-link class="navbar-item" @click.native="closeBurger" to="/profile">Profile</router-link>
+              <router-link class="navbar-item" @click.native="closeBurger" to="/logout" v-if="user">Logout</router-link>
+              <router-link class="navbar-item" @click.native="closeBurger" to="/auth" v-if="!user">Login</router-link>
             </div>
           </div>
         </div>
@@ -102,6 +102,14 @@ export default {
         })
       })
       return cur
+    }
+  },
+  methods: {
+    closeBurger: function () {
+      this.burgerToggle = false
+    },
+    openBurger: function () {
+      this.burgerToggle = true
     }
   },
   created () {

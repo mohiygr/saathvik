@@ -1,5 +1,5 @@
 <template lang="html">
-  <section class="hero is-medium">
+  <section class="hero is-medium is-fullheight">
     <div class="modal" v-bind:class="{'is-active':isLoading}">
       <div class="modal-background"></div>
       <div class="modal-content box">

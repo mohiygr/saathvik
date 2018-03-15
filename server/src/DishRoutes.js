@@ -5,9 +5,9 @@ module.exports = function (app) {
   app.get('/dishes', (req, res) => {
     Dish.find()
       .populate('category')
-      .exec()
+      .sort({'title':'asc'})
       .then((dbres) => {
-        res.send(JSON.stringify(dbres, null, 2))
+        res.send(dbres)
       }, (err) => {
         console.log("Error", err);
         res.send({status: 'error', message: 'error occurred fetching list of meals'})

@@ -3,7 +3,7 @@ const Category = require('./Category')
 module.exports = function (app) {
   app.get('/categories', (req, res) => {
     Category.find()
-      .exec()
+      .sort({'title':'asc'})
       .then((dbres) => {
         res.send(dbres)
       }, (err) => {

@@ -1,54 +1,42 @@
-/* eslint-disable */
-
 <template lang="html">
   <div class="section">
-    <h1 class="title is-4">Contact Details</h1>
+    <div class="modal" v-bind:class="{'is-active':isAdding}">
+      <div class="modal-background"></div>
+      <div class="modal-content box">
+        <div class="notification has-text-centered">
+          <p class="subtitle">Loading... </p>
+        </div>
+      </div>
+    </div>
     <div class="columns">
-      <div class="column">
-        <div class="field">
-          <label class="label">Phone</label>
-          <div class="control">
-            <input class="input" placeholder="Phone" v-model="ourphone">
-            <p class="help" v-bind:class="{'is-info': !isValidPhone}" v-if="!isValidPhone">Please fill a 10-digit Phone number.</p>
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">E-Mail</label>
-          <div class="control">
-            <input class="input" v-bind:class="{'is-info': !isValidEmail}" placeholder="Email" v-model="ouremail">
-          </div>
-          <p class="help" v-bind:class="{'is-info': !isValidEmail}" v-if="!isValidEmail">Please fill a valid e-mail address.</p>
-        </div>
-        <div class="field">
-          <label class="label">Address</label>
-          <div class="control">
-            <textarea class="input textarea" rows="10" placeholder="Optional" v-model="ouraddress"></textarea>
-          </div>
-        </div>
+      <div class="column is-one-third">
+        <h1 class="title is-3">Settings</h1>
       </div>
-      <div class="column">
-        <div class="section">
-          <h1 class="title is-4">Authorized Admin</h1>
+      <div class="column is-two-thirds">
+        <div v-if="isError" class="notification is-danger">
+          <button @click="isError = false" class="delete"></button>
+          {{notify}}
         </div>
-        <div class="columns">
-          <div class="column">
-            <div class="field">
-              <label class="label">Admin</label>
-              <p class="help">Enter the uid of the registered user from database</p>
-              <p class="has-text-danger">(if you don't know what you are doing, don't change this!)</p>
-              <div class="control">
-                <input class="input" placeholder="Phone" v-model="ouradmin">
-              </div>
-            </div>
-          </div>
+        <div v-if="isSuccess" class="notification is-success">
+          <button @click="isSuccess = false" class="delete"></button>
+          {{notify}}
         </div>
       </div>
     </div>
-    <div class="container has-text-centered">
-      <button class="button is-primary" v-on:click="submitForm" v-bind:disabled="!isSubmitReady" v-bind:class="{'is-loading': isSubmitting}">Save</button>
-      <a class="button is-transparent" href="/">Cancel</a>
+    <div class="columns" v-for="kv in settings" v-bind:key="kv._id">
+      <div class="column is-3">
+        <label class="label">{{kv.key}}</label>
+      </div>
+      <div class="column is-6">
+        <div class="control">
+          <input ref="title" class="input" :class="{'is-danger':kv.danger,'is-success':kv.success}" placeholder="value" v-model.trim="kv.value">
+        </div>
+      </div>
+      <div class="column is-3">
+        <a class="button is-primary" @click="updateSetting(kv)" :disabled="!hasChanged(kv)">Update</a>
+        <a class="button is-link" v-if="hasChanged(kv)">Cancel</a>
+      </div>
     </div>
-    <p class="help has-text-centered">Last Updated: {{lastUpdatedTime}}</p>
   </div>
 </template>
 
@@ -57,123 +45,102 @@ import axios from 'axios'
 
 export default {
   name: 'Admin',
+  created () {
+    this.refresh()
+  },
   data () {
     return {
-      ourphone: '',
-      ouremail: '',
-      ouraddress: '',
-      ourcontactname: '',
-      ouradmin: '',
-      lastupdated: null,
-      isSubmitting: false
-    }
-  },
-  created () {
-    var vm = this
-    axios.get('/settings')
-      .then(
-        function (o) {
-          o.data.forEach(function (kv) {
-            if (kv.key === 'contact.phone') {
-              vm.ourphone = kv.value
-            } else if (kv.key === 'contact.email') {
-              vm.ouremail = kv.value
-            } else if (kv.key === 'contact.name') {
-              vm.ourcontactname = kv.value
-            } else if (kv.key === 'contact.address') {
-              vm.ouraddress = kv.value
-            } else if (kv.key === 'admin.uid') {
-              vm.ouradmin = kv.value
-              vm.lastupdated = kv.last_modified
-            } else {
-              console.log('skipping irrelevant setting', kv)
-            }
-          })
-        },
-        function (e) {
-          console.log('Error fetching settings', e)
-        }
-      )
-  },
-  computed: {
-    lastUpdatedTime: function () {
-      if (this.lastupdated) {
-        const d = new Date(this.lastupdated)
-        return d.toString()
-      } else {
-        return '...'
-      }
-    },
-    isValidPhone: function () {
-      if (this.ourphone.match(new RegExp(/^([0-9]){10}$/))) {
-        return true
-      } else {
-        return false
-      }
-    },
-    isValidAddress: function () {
-      if (this.ouraddress.match(new RegExp(/^.+$/, 'gms'))) {
-        return true
-      } else {
-        return false
-      }
-    },
-    isValidEmail: function () {
-      if (this.ouremail.match(new RegExp(/^(.*?)@(.*?)\.(.+)$/))) {
-        return true
-      } else {
-        return false
-      }
-    },
-    ourphoneurl: function () {
-      return 'tel://' + this.ourphone
-    },
-    ouremailurl: function () {
-      return 'maito://' + this.ouremail + '?Subject=Lunch / Dinner Enquiry'
-    },
-    isSubmitReady: function () {
-      if (this.isValidEmail && this.isValidAddress && this.isValidPhone) {
-        return true
-      } else {
-        return false
-      }
+      isError: false,
+      isSuccess: false,
+      isAdding: false,
+      settings: []
     }
   },
   methods: {
-    submitForm: function () {
-      if (this.isValidEmail && this.isValidAddress && this.isValidPhone) {
-        this.isSubmitting = true
-        var vm = this
-        var nowdt = Date.now()
-        var kvs = [
-          { key: 'contact.phone', value: this.ourphone, last_modified: nowdt },
-          { key: 'contact.email', value: this.ouremail, last_modified: nowdt },
-          { key: 'contact.address', value: this.ouraddress, last_modified: nowdt },
-          { key: 'admin.uid', value: this.ouradmin, last_modified: nowdt }
-        ]
-        kvs.forEach(function (kv) {
-          const k = kv.key
-          const uri = '/settings/' + k
-          axios.put(uri, kv)
-            .then(
-              function (obj) {
-                vm.lastupdated = nowdt
-              },
-              function (err) {
-                console.log('Error putting setting "' + k + '"', err)
-              }
-            )
-        })
-        this.isSubmitting = false
-        this.$notify('Saved!')
+    undoChange: function (kv, old) {
+      kv.value = old
+      kv.oldvalue = kv.value
+      kv.updated = false
+      this.updateSetting(kv)
+    },
+    hasChanged: function (kv) {
+      if (kv.value !== kv.oldvalue) {
+        return true
       }
+    },
+    success: function (msg, kv) {
+      var oldval = kv.oldvalue
+      kv.oldvalue = kv.value
+      this.$snackbar.open({
+        duration: 5000,
+        message: msg,
+        type: 'is-success',
+        position: 'is-top',
+        actionText: 'Undo',
+        onAction: () => {
+          this.undoChange(kv, oldval)
+          this.$toast.open({
+            message: 'Reverted to old value',
+            queue: true
+          })
+        }
+      })
+    },
+    danger: function (msg, kv) {
+      kv['warn'] = true
+      this.$snackbar.open({
+        duration: 7000,
+        message: msg,
+        type: 'is-danger',
+        position: 'is-bottom-left',
+        actionText: 'Undo',
+        onAction: () => {
+          kv['warn'] = false
+          this.updateSetting(kv)
+          this.$toast.open({
+            message: 'Retrying...',
+            queue: false
+          })
+        }
+      })
+    },
+    refresh: function () {
+      this.settings = []
+      var vm = this
+      axios.get('/settings')
+        .then(
+          (resp) => {
+            console.log('resp', resp.data)
+            resp.data.forEach(function (cat) {
+              cat['warn'] = false
+              cat['success'] = false
+              cat['oldvalue'] = cat['value']
+              vm.settings.push(cat)
+            })
+          },
+          (err) => {
+            console.log('error in fetching settings', err)
+          })
+    },
+    updateSetting: function (kv) {
+      var vm = this
+      axios.put('/settings/' + kv.key, kv)
+        .then(
+          (resp) => {
+            vm.success('updated ' + kv.key + ' = ' + kv.value, kv)
+            kv.updated = true
+          },
+          (err) => {
+            console.log('Error', err)
+            vm.danger('could not update.', kv)
+          })
     }
   }
 }
 </script>
 
 <style>
-  notifications {
-  z-index: 999;
+  .mybox {
+  border: 2px solid red
   }
 </style>

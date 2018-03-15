@@ -13,9 +13,14 @@
     <div class="columns">
       <div class="column">
         <div class="box has-text-centered">
-          <h1 class="is-4">Phone</h1>
+          <h1 class="is-4">{{ourname}}</h1>
           <h1 class="is-5">{{ourphone}}</h1>
           <a class="button is-link is-rounded" v-bind:href="ourphoneurl">Call</a>
+        </div>
+        <div class="box has-text-centered" v-if="ourname2">
+          <h1 class="is-4">{{ourname2}}</h1>
+          <h1 class="is-5">{{ourphone2}}</h1>
+          <a class="button is-link is-rounded" v-bind:href="ourphoneurl2">Call</a>
         </div>
       </div>
       <div class="column is-two-thirds">
@@ -92,6 +97,9 @@ export default {
   data () {
     return {
       ourphone: '',
+      ourphone2: '',
+      ourname: '',
+      ourname2: '',
       ouremail: '',
       ouraddress: '',
       name: '',
@@ -118,6 +126,12 @@ export default {
           o.data.forEach(function (kv) {
             if (kv.key === 'contact.phone') {
               vm.ourphone = kv.value
+            } else if (kv.key === 'contact.name') {
+              vm.ourname = kv.value
+            } else if (kv.key === 'contact.phone2') {
+              vm.ourphone2 = kv.value
+            } else if (kv.key === 'contact.name2') {
+              vm.ourname2 = kv.value
             } else if (kv.key === 'contact.email') {
               vm.ouremail = kv.value
             } else if (kv.key === 'contact.name') {
@@ -155,6 +169,9 @@ export default {
     },
     ourphoneurl: function () {
       return 'tel://' + this.ourphone
+    },
+    ourphoneurl2: function () {
+      return 'tel://' + this.ourphone2
     },
     ouremailurl: function () {
       return 'maito://' + this.ouremail + '?Subject=Lunch / Dinner Enquiry'

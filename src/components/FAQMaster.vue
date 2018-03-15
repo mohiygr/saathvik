@@ -94,6 +94,24 @@ export default {
       this.answer = f.answer
       this.votes = f.votes
     },
+    successMsg: function (msg) {
+      this.$toast.open({
+        duration: 5000,
+        message: msg,
+        queue: true,
+        type: 'is-success',
+        position: 'is-bottom'
+      })
+    },
+    infoMsg: function (msg) {
+      this.$toast.open({
+        duration: 1000,
+        message: msg,
+        queue: false,
+        type: 'is-success',
+        position: 'is-top'
+      })
+    },
     submitForm: function () {
       var vm = this
       this.isSaving = true
@@ -114,11 +132,12 @@ export default {
               vm.answer = null
               vm.votes = 0
               console.log('put output', o)
+              vm.successMsg('Updated')
               vm.refresh()
             },
             (e) => {
               vm.isSaving = false
-              console.log('Error in posting to FAQ', e)
+              vm.successMsg('Error in updating')
             }
           )
       } else {
@@ -134,11 +153,12 @@ export default {
               vm.question = null
               vm.answer = null
               vm.votes = 0
+              vm.successMsg('Created')
               vm.refresh()
             },
             (e) => {
               vm.isSaving = false
-              console.log('Error in posting to FAQ', e)
+              console.log('Error creating new FAQ', e)
             }
           )
       }
@@ -146,6 +166,7 @@ export default {
     refresh: function () {
       var vm = this
       vm.isLoading = true
+      this.infoMsg('Refreshing...')
       axios.get('/faqs')
         .then(
           function (o) {
@@ -168,11 +189,11 @@ export default {
           axios.delete('/faqs/' + f._id)
             .then(
               (o) => {
-                console.log('deleted FAQ', o)
+                vm.successMsg('Deleted')
                 vm.refresh()
               },
               (e) => {
-                console.log('error in deleting FAQ', e)
+                vm.successMsg('Error in deleting')
               })
         }
       }
