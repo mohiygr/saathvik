@@ -1,20 +1,24 @@
 <template lang="html">
-  <div class="section">
-    <h1 class="title">FAQ</h1>
-    <div class="columns" v-for="faq in faqs" :key="faq._id">
-      <div class="column">
-        <div class="content5B">
-          <b-collapse class="card" :open="false">
-            <div slot="trigger" slot-scope="props" class="card-header" @click="if (!props.open) { viewSome = true; upvote(faq) }">
-              <p class="card-header-title">
-                {{faq.question}}
-              </p>
+  <div class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">FAQ</h1>
+        <div class="columns" v-for="faq in faqs" :key="faq._id">
+          <div class="column">
+            <div class="content5B">
+              <b-collapse class="card" :open="false">
+                <div slot="trigger" slot-scope="props" class="card-header" @click="if (!props.open) { viewSome = true; upvote(faq) }">
+                  <p class="card-header-title">
+                    {{faq.question}}
+                  </p>
+                </div>
+                <div class="card-content">
+                  <div class="content" v-html="faq.answer">
+                  </div>
+                </div>
+              </b-collapse>
             </div>
-            <div class="card-content">
-              <div class="content" v-html="faq.answer">
-              </div>
-            </div>
-          </b-collapse>
+          </div>
         </div>
       </div>
     </div>

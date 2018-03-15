@@ -13,26 +13,26 @@
     <div class="columns">
       <div class="column">
         <div class="box has-text-centered">
-          <h1 class="is-4">{{ourname}}</h1>
-          <h1 class="is-5">{{ourphone}}</h1>
+          <h1 class="subtitle is-5">{{ourname}}</h1>
+          <h1 class="title is-4">{{ourphone}}</h1>
           <a class="button is-link is-rounded" v-bind:href="ourphoneurl">Call</a>
         </div>
         <div class="box has-text-centered" v-if="ourname2">
-          <h1 class="is-4">{{ourname2}}</h1>
-          <h1 class="is-5">{{ourphone2}}</h1>
+          <h1 class="subtitle is-5">{{ourname2}}</h1>
+          <h1 class="title is-4">{{ourphone2}}</h1>
           <a class="button is-link is-rounded" v-bind:href="ourphoneurl2">Call</a>
         </div>
       </div>
       <div class="column is-two-thirds">
         <div class="box has-text-centered">
-          <h1 class="is-4 pull-left">Address</h1>
-          <h2 class="is-5 pulled-left" v-html="ouraddress"></h2>
+          <h1 class="subtitle is-5 pull-left">Address</h1>
+          <h2 class="title is-4 pulled-left" v-html="ouraddress"></h2>
         </div>
       </div>
       <div class="column">
         <div class="box has-text-centered">
-          <h1 class="is-4">Email</h1>
-          <h1 class="is-5">{{ouremail}}</h1>
+          <h1 class="subtitle is-5">Email</h1>
+          <h1 class="title is-6">{{ouremail}}</h1>
           <a class="button is-link is-rounded" v-bind:href="ouremailurl">E-Mail us</a>
         </div>
       </div>
