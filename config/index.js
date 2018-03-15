@@ -11,6 +11,18 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/enquiries': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      },
+      '/faqs': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      },
+      '/settings': {
+        target: 'http://localhost:8081',
+        changeOrigin: true
+      },
       '/meals': {
         target: 'http://localhost:8081',
         changeOrigin: true

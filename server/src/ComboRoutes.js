@@ -33,7 +33,7 @@ module.exports = function (app) {
       .populate('categories')
       .exec()
       .then((dbres) => {
-        res.send(dbres)
+        res.send(JSON.stringify(dbres, null, 2))
       }, (err) => {
         console.log("MY Error", err);
         res.send({status: 'error', message: 'error occurred fetching list of combos'})

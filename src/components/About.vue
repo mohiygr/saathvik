@@ -38,7 +38,6 @@
           </div>
           <div class="content">
             <h1 class="title">The Team</h1>
-            <h2 class="subtitle">With a decade of experience in organic and natural farming, we have now forayed also into providing delightfully cooked traditional authentic south indian food items, <em>Natural & Organic</em>, of course!</h2>
             <section>
               <div class="columns">
                 <div class="column is-4">

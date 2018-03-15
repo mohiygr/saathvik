@@ -35,6 +35,7 @@
             <div class="field">
               <label class="label">Admin</label>
               <p class="help">Enter the uid of the registered user from database</p>
+              <p class="has-text-danger">(if you don't know what you are doing, don't change this!)</p>
               <div class="control">
                 <input class="input" placeholder="Phone" v-model="ouradmin">
               </div>
@@ -44,15 +45,15 @@
       </div>
     </div>
     <div class="container has-text-centered">
-      <button class="button is-primary" v-on:click="submitForm" v-bind:disabled="!isSubmitReady" v-bind:class="{'is-loading': isSubmitting}">Submit</button>
-      <button class="button is-transparent">Cancel</button>
+      <button class="button is-primary" v-on:click="submitForm" v-bind:disabled="!isSubmitReady" v-bind:class="{'is-loading': isSubmitting}">Save</button>
+      <a class="button is-transparent" href="/">Cancel</a>
     </div>
     <p class="help has-text-centered">Last Updated: {{lastUpdatedTime}}</p>
   </div>
 </template>
 
 <script>
-import firebase from 'firebase'
+import axios from 'axios'
 
 export default {
   name: 'Admin',
@@ -61,30 +62,47 @@ export default {
       ourphone: '',
       ouremail: '',
       ouraddress: '',
+      ourcontactname: '',
       ouradmin: '',
-      lastupdated: '',
+      lastupdated: null,
       isSubmitting: false
     }
   },
   created () {
     var vm = this
-    firebase.database().ref('admin').once('value')
-      .then(function (cfg) {
-        if (cfg.val()) {
-          vm.ourphone = cfg.val().ourphone
-          vm.ouremail = cfg.val().ouremail
-          vm.ouraddress = cfg.val().ouraddress
-          vm.ouradmin = cfg.val().ouradmin
-          vm.lastupdated = cfg.val().lastupdated
-        } else {
-          console.log('first time?')
+    axios.get('/settings')
+      .then(
+        function (o) {
+          o.data.forEach(function (kv) {
+            if (kv.key === 'contact.phone') {
+              vm.ourphone = kv.value
+            } else if (kv.key === 'contact.email') {
+              vm.ouremail = kv.value
+            } else if (kv.key === 'contact.name') {
+              vm.ourcontactname = kv.value
+            } else if (kv.key === 'contact.address') {
+              vm.ouraddress = kv.value
+            } else if (kv.key === 'admin.uid') {
+              vm.ouradmin = kv.value
+              vm.lastupdated = kv.last_modified
+            } else {
+              console.log('skipping irrelevant setting', kv)
+            }
+          })
+        },
+        function (e) {
+          console.log('Error fetching settings', e)
         }
-      })
+      )
   },
   computed: {
     lastUpdatedTime: function () {
-      const d = new Date(this.lastupdated)
-      return d.toString()
+      if (this.lastupdated) {
+        const d = new Date(this.lastupdated)
+        return d.toString()
+      } else {
+        return '...'
+      }
     },
     isValidPhone: function () {
       if (this.ourphone.match(new RegExp(/^([0-9]){10}$/))) {
@@ -127,23 +145,35 @@ export default {
         this.isSubmitting = true
         var vm = this
         var nowdt = Date.now()
-        firebase.database().ref('admin')
-          .set(
-            {
-              ouraddress: this.ouraddress,
-              ouremail: this.ouremail,
-              ourphone: this.ourphone,
-              ouradmin: this.ouradmin,
-              lastupdated: nowdt
-            })
-          .then(function (obj) {
-            console.log('Object saved', obj)
-            vm.isSubmitting = false
-            vm.lastupdated = nowdt
-            vm.$notify('Updated!')
-          })
+        var kvs = [
+          { key: 'contact.phone', value: this.ourphone, last_modified: nowdt },
+          { key: 'contact.email', value: this.ouremail, last_modified: nowdt },
+          { key: 'contact.address', value: this.ouraddress, last_modified: nowdt },
+          { key: 'admin.uid', value: this.ouradmin, last_modified: nowdt }
+        ]
+        kvs.forEach(function (kv) {
+          const k = kv.key
+          const uri = '/settings/' + k
+          axios.put(uri, kv)
+            .then(
+              function (obj) {
+                vm.lastupdated = nowdt
+              },
+              function (err) {
+                console.log('Error putting setting "' + k + '"', err)
+              }
+            )
+        })
+        this.isSubmitting = false
+        this.$notify('Saved!')
       }
     }
   }
 }
 </script>
+
+<style>
+  notifications {
+  z-index: 999;
+  }
+</style>

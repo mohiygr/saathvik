@@ -33,8 +33,8 @@ module.exports = function (app) {
 
   app.get('/meals', (req, res) => {
     Meal.find({})
-      .populate('dishes')
       .populate('combo')
+      .populate('dishes')
       .exec()
       .then((dbres) => {
         res.send(JSON.stringify(dbres, null, 2))

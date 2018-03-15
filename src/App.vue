@@ -19,6 +19,9 @@
           <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Menu')}" to="/menu">
             Menu
           </router-link>
+          <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'FAQ')}" to="/faq">
+            FAQ
+          </router-link>
           <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Contact')}" to="/contact">
             Contact
           </router-link>
@@ -31,8 +34,10 @@
               <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Dishes')}" to="/dishmaster" v-if="user">Dishes</router-link>
               <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Combos')}" to="/combomaster" v-if="user">Combos</router-link>
               <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Meals')}" to="/mealmaster" v-if="user">Meals</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'FAQMaster')}" to="/faqmaster" v-if="user">FAQ Master</router-link>
               <hr class="navbar-divider">
-              <router-link class="navbar-item" to="/admin">Settings</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Enquiries')}" to="/enquiriesmaster" v-if="user">Enquiries</router-link>
+              <router-link class="navbar-item" v-bind:class="{'is-active': (currentMenu === 'Settings')}" to="/admin" v-if="user">Settings</router-link>
             </div>
           </div>
           <div class="navbar-item has-dropdown is-hoverable" v-bind:class="{'is-active': (currentMenu === 'Account')}">
@@ -67,10 +72,13 @@ export default {
         'Contact': ['/contact'],
         'Admin': ['/admin', '/catmaster'],
         'Menu': ['/menu'],
+        'FAQ': ['/faq'],
         'About': ['/about'],
         'Categories': ['/catmaster'],
         'Meals': ['/mealmaster'],
         'Dishes': ['/dishmaster'],
+        'Enquiries': ['/enquiriesmaster'],
+        'FAQMaster': ['/faqmaster'],
         'Combos': ['/combomaster'],
         'Account': ['/logout', '/auth', '/profile']
       },
@@ -128,15 +136,20 @@ export default {
 <style scoped>
 notifications {
     z-index: 999;
+    color: black;
+    background-color: gray;
 }
 .mycontainer {
   background-color: #dacaa9;
 }
+.navbar-item .is-active {
+    background-color: #00bb00;
+}
 .mynav, .mynav .navbar-dropdown {
-background-color: #154668;
+    background-color: #d8b98c;
 }
 .mynav .navbar-item, .navbar-link {
-color: #abdeee;
+color: #bb0000;
 }
 .mynav .navbar-link:hover, .navbar-item:hover {
 color:#225560;

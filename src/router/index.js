@@ -12,6 +12,9 @@ import Admin from '../components/Admin'
 import CatMaster from '../components/CatMaster'
 import DishMaster from '../components/DishMaster'
 import MealMaster from '../components/MealMaster'
+import EnquiriesMaster from '../components/EnquiriesMaster'
+import FAQMaster from '../components/FAQMaster'
+import FAQ from '../components/FAQ'
 import ComboMaster from '../components/ComboMaster'
 import NotFound from '../components/NotFound'
 import Logout from '../components/Logout'
@@ -26,9 +29,12 @@ const router = new VueRouter({
     { path: '/', exact: true, component: Home },
     { path: '/about', component: About },
     { path: '/menu', component: Menu },
+    { path: '/faq', component: FAQ },
     { path: '/catmaster', component: CatMaster },
     { path: '/dishmaster', component: DishMaster },
     { path: '/mealmaster', component: MealMaster },
+    { path: '/enquiriesmaster', component: EnquiriesMaster },
+    { path: '/faqmaster', component: FAQMaster },
     { path: '/combomaster', component: ComboMaster },
     { path: '/contact', component: Contact },
     { path: '/admin', component: Admin, meta: { requiresAuth: true } },

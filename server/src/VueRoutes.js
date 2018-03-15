@@ -5,24 +5,13 @@ function doIt(res) {
 }
 
 module.exports = function (app) {
-  app.get('/auth', (req, res) => {
-    doIt(res)
-  })
-  app.get('/contact', (req, res) => {
-    doIt(res)
-  })
-  app.get('/menu', (req, res) => {
-    doIt(res)
-  })
-  app.get('/profile', (req, res) => {
-    doIt(res)
-  })
-  app.get('/about', (req, res) => {
-    doIt(res)
-  })
-  app.get('/logout', (req, res) => {
-    doIt(res)
+  var stuff = ['auth', 'about', 'contact', 'faq', 'menu', 'profile',
+               'logout','admin', 'faqmaster', 'catmaster','dishmaster',
+               'combomaster' ,'mealmaster']
+
+  stuff.forEach(function (path) {
+    app.get('/' + path, (req, res) => {
+      doIt(res)
+    })
   })
 }
-
-

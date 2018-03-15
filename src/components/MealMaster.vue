@@ -1,4 +1,4 @@
-<template lang="html">
+g<template lang="html">
   <div class="section">
     <div class="modal" v-bind:class="{'is-active':isAdding}">
       <div class="modal-background"></div>
@@ -54,7 +54,7 @@
             </div>
             <div class="field">
               <button v-bind:class="{'is-loading': isAdding}" v-bind:disabled="!isFormReady" @click="addMeal" class="button is-primary is-medium is-rounded">{{AddOrEdit}}</button>
-              <button class="button is-rounded is-transparent" v-if="(AddOrEdit == 'Update')" @click="mealId = null; selectedDishes = []; selectedCombo = null; title = ''">cancel</button>
+              <button class="button is-rounded is-transparent" v-if="(AddOrEdit == 'Update')" @click="meal = null; selectedDishes = []; selectedCombo = null; title = ''">cancel</button>
             </div>
           </div>
         </div>
@@ -67,17 +67,17 @@
                 <td class="thead">Dishes</td>
                 <td class="thead">Actions</td>
               </tr>
-              <tr class="tr" v-for="meal in meals" v-bind:key="meal._id">
-                <td class="td"><h1 class="title is-4">{{meal.title}}</h1></td>
-                <td class="td"><h1 class="title is-4">{{meal.combo.title}}</h1></td>
+              <tr class="tr" v-for="m in meals" v-bind:key="m._id">
+                <td class="td"><h1 class="title is-4">{{m.title}}</h1></td>
+                <td class="td"><h1 class="title is-4">{{m.combo.title}}</h1></td>
                 <td class="td">
                   <div class="tags">
-                    <span class="tag is-rounded is-info" v-for="dish in meal.dishes" v-bind:key="dish._id">{{dish.title}}</span>
+                    <span class="tag is-rounded is-info" v-for="dish in m.dishes" v-bind:key="dish._id">{{dish.title}}</span>
                   </div>
                 </td>
                 <td class="td">
-                  <button v-bind:disabled="(meal._id === mealId)" class="button is-small is-link is-rounded" @click="editMeal(meal)">Edit</button>
-                  <button @click="deleteMeal(meal)" class="button is-small is-danger is-rounded">X</button>
+                  <button v-bind:disabled="(meal && (m._id === meal._id))" class="button is-small is-link is-rounded" @click="editMeal(m)">Edit</button>
+                  <button @click="deleteMeal(m)" class="button is-small is-danger is-rounded">X</button>
                 </td>
               </tr>
             </table>
@@ -110,7 +110,7 @@ export default {
       selectedCombo: null,
       selectedDishes: [],
       category: null,
-      mealId: null, // means, "new", else means "Edit" to given id
+      meal: null, // means, "new", else means "Edit" to given id
       title: '',
       titleBeforeUpdate: ''
     }
@@ -141,7 +141,7 @@ export default {
       return (this.isValidTitle && this.isValidDishes && this.isValidCombo)
     },
     AddOrEdit: function () {
-      return (this.mealId ? 'Update' : 'Add')
+      return (this.meal ? 'Update' : 'Add')
     }
   },
   methods: {
@@ -184,6 +184,7 @@ export default {
       axios.get('/meals')
         .then(
           (resp) => {
+            console.log('Meals out', resp)
             resp.data.forEach(function (meal) {
               vm.meals.push(meal)
             })
@@ -197,11 +198,11 @@ export default {
       this.isAdding = true
       var newMeal = { title: this.title, combo: this.selectedCombo, dishes: this.selectedDishes }
 
-      if (this.mealId) { // update an existing object
-        axios.put('/meals/' + this.mealId, newMeal)
+      if (this.meal) { // update an existing object
+        axios.put('/meals/' + this.meal._id, newMeal)
           .then(
             (resp) => {
-              vm.mealId = null
+              vm.meal = null
               vm.selectedCombo = null
               vm.selectedDishes = []
               vm.isError = false
@@ -261,9 +262,9 @@ export default {
         })
     },
     editMeal: function (meal) {
-      this.mealId = meal._id
-      this.selectedDishes = meal.dishes
+      this.meal = meal
       this.selectedCombo = meal.combo
+      // this.selectedDishes = meal.dishes
       // find in categories, catId and set title to that
       this.title = meal.title
     }

@@ -85,6 +85,7 @@
 
 <script>
 import firebase from 'firebase'
+import axios from 'axios'
 
 export default {
   name: 'Contact',
@@ -104,23 +105,33 @@ export default {
   },
   created () {
     var vm = this
-    var u = firebase.auth().currentUser
     this.isLoading = true
-    firebase.database().ref('admin').once('value')
-      .then(function (cfg) {
-        vm.isLoading = false
-        if (cfg.val()) {
-          vm.ourphone = cfg.val().ourphone
-          vm.ouremail = cfg.val().ouremail
-          vm.ouraddress = cfg.val().ouraddress
-          if (u) {
-            vm.email = u.email
-            vm.name = u.displayName
-          }
-        } else {
-          console.log('first time?')
-        }
-      })
+    var u = firebase.auth().currentUser
+    if (u) {
+      vm.email = u.email
+      vm.name = u.displayName
+    }
+    axios.get('/settings')
+      .then(
+        function (o) {
+          vm.isLoading = false
+          o.data.forEach(function (kv) {
+            if (kv.key === 'contact.phone') {
+              vm.ourphone = kv.value
+            } else if (kv.key === 'contact.email') {
+              vm.ouremail = kv.value
+            } else if (kv.key === 'contact.name') {
+              vm.ourcontactname = kv.value
+            } else if (kv.key === 'contact.address') {
+              vm.ouraddress = kv.value
+            } else {
+              console.log('skipping irrelevant setting', kv)
+            }
+          })
+        },
+        function (e) {
+          console.log('Error fetching settings', e)
+        })
   },
   computed: {
     obj: function () {
@@ -161,18 +172,18 @@ export default {
       if (this.isValidEmail && this.isValidName && this.isValidEmail) {
         this.isSubmitting = true
         var vm = this
-        firebase.database().ref('enquiries')
-          .push(
-            {
-              name: this.name,
-              email: this.email,
-              phone: this.phone,
-              message: this.message,
-              date: Date.now()
-            })
+        axios.post('/enquiries', {
+          name: this.name,
+          email: this.email,
+          phone: this.phone,
+          pincode: this.pincode,
+          message: this.message,
+          date: Date.now()
+        })
           .then(function (obj) {
             console.log('Object saved', obj)
             vm.isSubmitting = false
+            vm.$notify('Posted!')
           })
       }
     }

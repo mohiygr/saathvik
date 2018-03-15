@@ -75,7 +75,21 @@
             <div class="column">
               <h1 class="title">At your Doorsteps</h1>
               <h2 class="subtitle">We offer regular delivery of Lunch and Dinner of many traditional south indian dishes.</h2>
-              <router-link class="button is-primary is-large is-rounded" to="/contact">Contact</router-link>
+              <div class="content">
+                <div class="columns">
+                  <div class="column phonenums">
+                    <h1 class="subtitle">Call us now</h1>
+                    <ul>
+                      <li><a class="button is-primary is-rounded is-medium" href="tel://9500095627">9500095627</a></li>
+                      <li><a class="button is-primary is-rounded is-medium" href="tel://9500095127">9500095127</a></li>
+                    </ul>
+                  </div>
+                  <div class="column">
+                    <h2 class="subtitle">Or, drop a message!</h2>
+                    <router-link class="button is-primary is-large is-rounded" to="/contact">Contact</router-link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -208,5 +222,7 @@ export default {
 .strong {
   color: #aa0011;
 }
-
+.phonenums ul {
+  list-style-type: none;
+}
 </style>

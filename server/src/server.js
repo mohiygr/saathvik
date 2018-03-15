@@ -39,6 +39,9 @@ require('./DishRoutes')(app)
 require('./MealRoutes')(app)
 require('./ComboRoutes')(app)
 require('./VueRoutes')(app)
+require('./SettingsRoutes')(app)
+require('./EnquiryRoutes')(app)
+require('./FAQRoutes')(app)
 /***********************************/
 
 function myServerReadyMW (req, res, next) {
