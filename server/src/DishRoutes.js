@@ -7,7 +7,7 @@ module.exports = function (app) {
       .populate('category')
       .exec()
       .then((dbres) => {
-        res.send(dbres)
+        res.send(JSON.stringify(dbres, null, 2))
       }, (err) => {
         console.log("Error", err);
         res.send({status: 'error', message: 'error occurred fetching list of meals'})

@@ -4,7 +4,7 @@
     <div class="columns" v-for="(faq, idx) in faqs" :key="faq._id">
       <div class="column">
         <div class="content5B">
-          <b-collapse class="card" :open="openstatus[idx]">
+          <b-collapse class="card" :open="false">
             <div slot="trigger" slot-scope="props" class="card-header" @click="if (!props.open) { viewSome = true; upvote(faq) }">
               <p class="card-header-title">
                 {{faq.question}}
@@ -29,38 +29,13 @@ export default {
   data () {
     return {
       faqs: [],
-      openstatus: [],
       faq: null,
       isLoading: false,
       viewSome: false,
       viewAll: false
     }
   },
-  computed: {
-    viewWhat: function () {
-      var stat = false
-      this.openstatus.forEach(function (x) {
-        if (x) {
-          stat = true
-        }
-      })
-      if (stat) {
-        return 'Hide'
-      } else {
-        return 'Show'
-      }
-    }
-  },
   methods: {
-    toggleView: function () {
-      for (var i = 0; i < this.openstatus.length; i++) {
-        if (this.viewWhat === 'Hide') {
-          this.openstatus[i] = false
-        } else {
-          this.openstatus[i] = true
-        }
-      }
-    },
     upvote: function (f) {
       axios.put('/faqs/' + f._id + '/incr_vote')
         .then(
@@ -82,7 +57,6 @@ export default {
             for (var i = 0; i < o.data.length; i++) {
               var faq = o.data[i]
               vm.faqs.push(faq)
-              vm.openstatus.push(false)
             }
             vm.isLoading = false
           },

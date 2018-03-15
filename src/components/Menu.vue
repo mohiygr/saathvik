@@ -35,7 +35,7 @@
                           <div class="box dishbox">
                             <h1 class="title is-5">{{dish.title}}</h1>
                             <h2 class="title is-6">₹{{dish.cost}}</h2>
-                            <p class="subtitle is-6">{{dish.category.title}}</p>
+                            <p class="subtitle is-6" v-if="dish.category">{{dish.category.title}}</p>
                           </div>
                         </slide>
                       </carousel>

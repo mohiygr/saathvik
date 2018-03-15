@@ -39,8 +39,8 @@ g<template lang="html">
                 </b-select>
               </div>
             </div>
-            <div class="level" v-if="selectedCombo !== null">
-              <div class="level-item" v-for="(cat, idx) in selectedCombo.categories" v-bind:key="cat._id">
+            <div class="container" v-if="selectedCombo !== null">
+              <div class="content" v-for="(cat, idx) in selectedCombo.categories" v-bind:key="cat._id">
                 <div class="field">
                   <label class="label">{{cat.title}}</label>
                   <b-select v-bind:placeholder="cat.title" class="select" v-model="selectedDishes[idx]">

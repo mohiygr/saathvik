@@ -69,7 +69,7 @@
               </tr>
               <tr class="tr" v-for="dish in dishes" v-bind:key="dish._id">
                 <td class="td"><h1 class="title is-4">{{dish.title}}</h1></td>
-                <td class="td"><h1 class="title is-4">{{dish.category.title}}</h1></td>
+                <td class="td"><h1 class="title is-4" v-if="dish.category">{{dish.category.title}}</h1></td>
                 <td class="td is-pulled-right"><h1 class="title is-4">{{dish.cost}}</h1></td>
                 <td class="td"><button v-bind:disabled="(dish._id === dishId)" class="button is-small is-link is-rounded" @click="editDish(dish)">Edit</button> <button @click="deleteDish(dish)" class="button is-small is-danger is-rounded">X</button></td>
               </tr>
